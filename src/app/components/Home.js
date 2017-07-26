@@ -7,78 +7,74 @@ export class Home extends React.Component {
     super();
     this.removeItem = this.removeItem.bind(this);
     this.editItem = this.editItem.bind(this);
-    this.onEditItem = this.onEditItem.bind(this);
-    this.addItem = this.addItem.bind(this);
-    this.onAddItem = this.onAddItem.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.showForm = this.showForm.bind(this);
     this.state = {
       editIndex: -1,
       showForm: false,
       items: [
-        {name: 'item1', cost: 20, editItem: this.editItem, removeItem: this.removeItem},
-        {name: 'item2', cost: 60, editItem: this.editItem, removeItem: this.removeItem},
-        {name: 'item3', cost: 120, editItem: this.editItem, removeItem: this.removeItem}
-      ]
+        {name: 'item1', cost: 20},
+        {name: 'item2', cost: 50},
+        {name: 'item3', cost: 70},
+      ],
     };
   };
 
-  removeItem(index){
+  removeItem(index) {
     let newList = this.state.items;
     newList.splice(index, 1);
     this.setState({
-      items: newList
+      items: newList,
     });
   }
 
-  addItem(){
+  showForm() {
     this.setState({
-      showForm: !this.state.showForm
+      showForm: !this.state.showForm,
     });
   }
 
-  onAddItem(formData){
-    //add validations here
-    formData.editItem=this.editItem;
-    formData.removeItem=this.removeItem;
+  handleSubmit(formData) {
+    formData.editItem = this.editItem;
+    formData.removeItem = this.removeItem;
     let newList = this.state.items;
-    newList.push(formData);
+    if (this.state.editIndex >= 0) {
+      newList.splice(this.state.editIndex, 1, formData);
+    }
+    else {
+      newList.push(formData);
+    }
     this.setState({
       items: newList,
-      showForm : false
+      showForm: false,
     });
   }
 
-  onEditItem(formData){
-    //add valideations here
-    formData.editItem=this.editItem;
-    formData.removeItem=this.removeItem;
-    let newList = this.state.items;
-    newList.splice(this.state.editIndex, 1, formData);
-    this.setState({
-      items: newList,
-      showForm : false
-    });
-  }
-
-  editItem(index){
+  editItem(index) {
     this.setState({
       editIndex: index,
-      showForm: true
+      showForm: true,
     });
+  }
+
+  formRender() {
+    let formRender = '';
+    if (this.state.showForm) {
+      if (this.state.editIndex >= 0) {
+        return formRender = this.state.showForm ?
+          <Form data={this.state.items[this.state.editIndex]} handleSubmit={this.handleSubmit}/> : '';
+      }
+      return formRender = this.state.showForm ? <Form handleSubmit={this.handleSubmit}/> : '';
+    }
   }
 
   render() {
-    let formRender='';
-    if(this.state.showForm)
-      if(this.state.editIndex>=0)
-        formRender=this.state.showForm?<Form data={this.state.items[this.state.editIndex]} onSubmit={this.onEditItem} />:'';
-
-      else
-        formRender=this.state.showForm?<Form onSubmit={this.onAddItem} />:'';
     return (
       <div>
-        Add New Item : <button onClick={this.addItem}><span className="glyphicon glyphicon-plus"/></button>
-        {formRender}
-        <ProductList items={this.state.items} />
+        Add New Item :
+        <button onClick={this.showForm}><span className="glyphicon glyphicon-plus"/></button>
+        {this.formRender()}
+        <ProductList items={this.state.items} removeItem={this.removeItem} editItem={this.editItem} />
       </div>
     );
   };
