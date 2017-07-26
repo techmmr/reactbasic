@@ -6,7 +6,7 @@ export class ProductList extends React.Component {
   render() {
     const listItems = this.props.items.map((item, index) =>
       <li key={index}>
-        <ListItem index={index} item={item} removeItem={this.props.removeItem} editItem={this.props.editItem} />
+        <ListItem item={item} removeItem={this.props.removeItem} editItem={this.props.editItem} />
       </li>
     );
     return (
@@ -19,6 +19,7 @@ export class ProductList extends React.Component {
 
 ProductList.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
     name: PropTypes.string,
     cost: PropTypes.number,
   })),

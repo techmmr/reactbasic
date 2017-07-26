@@ -1,3 +1,4 @@
+const md5 = require('md5');
 import React from 'react';
 import {ProductList} from './ProductList';
 import {Form} from './Form';
@@ -10,18 +11,26 @@ export class Home extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.showForm = this.showForm.bind(this);
     this.state = {
-      editIndex: -1,
+      editId: '',
       showForm: false,
       items: [
-        {name: 'item1', cost: 20},
-        {name: 'item2', cost: 50},
-        {name: 'item3', cost: 70},
+        {id: '0fbd1f163432b37effd39b9a5276b7a4', name: 'item1', cost: 40},
+        {id: '8e140cc0e354250ac4a0c83e011c4e36', name: 'item2', cost: 50},
       ],
     };
   };
 
-  removeItem(index) {
+  editItem(itemId) {
+    this.setState({
+      editId: itemId,
+      showForm: true,
+    });
+  }
+
+  removeItem(itemId) {
     let newList = this.state.items;
+    let item = newList.find(listItem => listItem.id === itemId);
+    let index = newList.indexOf(item);
     newList.splice(index, 1);
     this.setState({
       items: newList,
@@ -35,13 +44,15 @@ export class Home extends React.Component {
   }
 
   handleSubmit(formData) {
-    formData.editItem = this.editItem;
-    formData.removeItem = this.removeItem;
     let newList = this.state.items;
-    if (this.state.editIndex >= 0) {
-      newList.splice(this.state.editIndex, 1, formData);
+    if (this.state.editId !== '') {
+      let item = newList.find(listItem => listItem.id === this.state.editId);
+      let index = newList.indexOf(item);
+      formData.id = item.id;
+      newList.splice(index, 1, formData);
     }
     else {
+      formData.id = md5(formData.name + String(formData.cost));
       newList.push(formData);
     }
     this.setState({
@@ -50,22 +61,15 @@ export class Home extends React.Component {
     });
   }
 
-  editItem(index) {
-    this.setState({
-      editIndex: index,
-      showForm: true,
-    });
-  }
-
   formRender() {
-    let formRender = '';
     if (this.state.showForm) {
-      if (this.state.editIndex >= 0) {
-        return formRender = this.state.showForm ?
-          <Form data={this.state.items[this.state.editIndex]} handleSubmit={this.handleSubmit}/> : '';
+      if (this.state.editId !== '') {
+        let item = this.state.items.find(listItem => listItem.id === this.state.editId);
+        return this.state.showForm ? <Form data={item} handleSubmit={this.handleSubmit}/> : '';
       }
-      return formRender = this.state.showForm ? <Form handleSubmit={this.handleSubmit}/> : '';
+      return this.state.showForm ? <Form handleSubmit={this.handleSubmit}/> : '';
     }
+    return '';
   }
 
   render() {

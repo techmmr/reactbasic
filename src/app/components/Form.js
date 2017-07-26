@@ -36,6 +36,7 @@ export class Form extends React.Component {
 
 Form.propTypes = {
   data: PropTypes.shape({
+    id: PropTypes.string,
     name: PropTypes.string,
     cost: PropTypes.number,
   }),
