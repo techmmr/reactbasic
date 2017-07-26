@@ -1,4 +1,3 @@
-const md5 = require('md5');
 import React from 'react';
 import {ProductList} from './ProductList';
 import {Form} from './Form';
@@ -13,10 +12,8 @@ export class Home extends React.Component {
     this.state = {
       editId: '',
       showForm: false,
-      items: [
-        {id: '0fbd1f163432b37effd39b9a5276b7a4', name: 'item1', cost: 40},
-        {id: '8e140cc0e354250ac4a0c83e011c4e36', name: 'item2', cost: 50},
-      ],
+      items: [],
+      idCount: 0,
     };
   };
 
@@ -44,6 +41,9 @@ export class Home extends React.Component {
   }
 
   handleSubmit(formData) {
+    if (!(/^[a-zA-Z]*$/.test(formData.name) && /^\d*$/.test(formData.cost))){
+      return alert('lul nice try');
+    }
     let newList = this.state.items;
     if (this.state.editId !== '') {
       let item = newList.find(listItem => listItem.id === this.state.editId);
@@ -52,12 +52,13 @@ export class Home extends React.Component {
       newList.splice(index, 1, formData);
     }
     else {
-      formData.id = md5(formData.name + String(formData.cost));
+      formData.id = this.state.idCount;
       newList.push(formData);
     }
     this.setState({
       items: newList,
       showForm: false,
+      idCount: this.state.idCount+1,
     });
   }
 

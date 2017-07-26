@@ -10,15 +10,25 @@ export class Form extends React.Component {
     };
   };
   onNameChange(event) {
-    this.setState({
-      name: event.target.value,
-    });
+    if(/^[a-zA-Z]*$/.test(event.target.value)) {
+      this.setState({
+        name: event.target.value,
+      });
+    }
+    else{
+      alert('nup, this wont work, only alphabets');
+    }
   };
 
   onCostChange(event) {
-    this.setState({
-      cost: event.target.value,
-    });
+    if(/^\d*$/.test(event.target.value)) {
+      this.setState({
+        cost: event.target.value,
+      });
+    }
+    else{
+      alert('nup, this wont work, only numbers');
+    }
   };
 
   render() {
@@ -27,7 +37,7 @@ export class Form extends React.Component {
       <form>
         Form <br/>
         Name : <input type="text" value={this.state.name} onChange={this.onNameChange.bind(this)}/><br/>
-        Cost : <input type="number" value={this.state.cost} onChange={this.onCostChange.bind(this)}/><br/>
+        Cost : <input type="text" value={this.state.cost} onChange={this.onCostChange.bind(this)}/><br/>
         <button onClick={() => this.props.handleSubmit(formData)}>Submit</button>
       </form>
     );
@@ -36,7 +46,7 @@ export class Form extends React.Component {
 
 Form.propTypes = {
   data: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     name: PropTypes.string,
     cost: PropTypes.number,
   }),

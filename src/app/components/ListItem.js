@@ -17,7 +17,7 @@ ListItem.propTypes = {
   removeItem: PropTypes.func,
   editItem: PropTypes.func,
   item: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     name: PropTypes.string,
     cost: PropTypes.number,
   }),

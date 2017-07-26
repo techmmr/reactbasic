@@ -19,7 +19,7 @@ export class ProductList extends React.Component {
 
 ProductList.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     name: PropTypes.string,
     cost: PropTypes.number,
   })),
