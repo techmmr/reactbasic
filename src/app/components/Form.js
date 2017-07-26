@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export class Form extends React.Component {
   constructor(props){
     super();
     this.state = {
-      name: props.name||'',
-      cost: props.cost||0
+      name: props.data?props.data.name:'',
+      cost: props.data?props.data.cost:0
     };
   };
   onNameChange(event) {
@@ -32,3 +33,7 @@ export class Form extends React.Component {
     );
   };
 }
+
+Form.propTypes = {
+  data: PropTypes.object
+};

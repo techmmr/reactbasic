@@ -7,9 +7,11 @@ export class Home extends React.Component {
     super();
     this.removeItem = this.removeItem.bind(this);
     this.editItem = this.editItem.bind(this);
+    this.onEditItem = this.onEditItem.bind(this);
     this.addItem = this.addItem.bind(this);
     this.onAddItem = this.onAddItem.bind(this);
     this.state = {
+      editIndex: -1,
       showForm: false,
       items: [
         {name: 'item1', cost: 20, editItem: this.editItem, removeItem: this.removeItem},
@@ -18,17 +20,6 @@ export class Home extends React.Component {
       ]
     };
   };
-
-  editItem(index, formData){
-    formData.editItem=this.editItem;
-    formData.removeItem=this.removeItem;
-    let newList = this.state.items;
-    newList.push(data);
-    this.setState({
-      items: newList,
-      showForm : false
-    });
-  }
 
   removeItem(index){
     let newList = this.state.items;
@@ -45,6 +36,7 @@ export class Home extends React.Component {
   }
 
   onAddItem(formData){
+    //add validations here
     formData.editItem=this.editItem;
     formData.removeItem=this.removeItem;
     let newList = this.state.items;
@@ -55,11 +47,37 @@ export class Home extends React.Component {
     });
   }
 
+  onEditItem(formData){
+    //add valideations here
+    formData.editItem=this.editItem;
+    formData.removeItem=this.removeItem;
+    let newList = this.state.items;
+    newList.splice(this.state.editIndex, 1, formData);
+    this.setState({
+      items: newList,
+      showForm : false
+    });
+  }
+
+  editItem(index){
+    this.setState({
+      editIndex: index,
+      showForm: true
+    });
+  }
+
   render() {
+    let formRender='';
+    if(this.state.showForm)
+      if(this.state.editIndex>=0)
+        formRender=this.state.showForm?<Form data={this.state.items[this.state.editIndex]} onSubmit={this.onEditItem} />:'';
+
+      else
+        formRender=this.state.showForm?<Form onSubmit={this.onAddItem} />:'';
     return (
       <div>
         Add New Item : <button onClick={this.addItem}><span className="glyphicon glyphicon-plus"/></button>
-        {this.state.showForm?<Form onSubmit={this.onAddItem} />:''}
+        {formRender}
         <ProductList items={this.state.items} />
       </div>
     );
