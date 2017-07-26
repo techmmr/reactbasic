@@ -1,61 +1,30 @@
 import React from 'react';
-import {Data} from './Data';
+import {ProductList} from './ProductList';
 
 export class Home extends React.Component {
   constructor() {
     super();
     this.state = {
-      name: '',
-      age: 0,
-      color: '',
-      status: true
+      items: [
+        {name: 'item1', cost: 20},
+        {name: 'item2', cost: 60},
+        {name: 'item3', cost: 120}
+      ]
     };
   };
-  onNameChange(event) {
-    this.setState({
-      name: event.target.value
-    });
-  };
-
-  onAgeChange(event) {
-    this.setState({
-      age: event.target.value
-    });
-  };
-
-  onColorChange(event) {
-    this.setState({
-      color: event.target.value
-    });
-  };
-
-
-  onSubmit() {
-    this.setState({
-      status : false
-    });
-  }
-
-  onEdit() {
-    this.setState({
-      status : true
-    });
-  }
 
   render() {
-    if (this.state.status)
-      return (
-        <form>
-          <h2>Form</h2> <br/>
-          Name : <input type="text" value={this.state.name} onChange={this.onNameChange.bind(this)}/><br/>
-          Age : <input type="number" value={this.state.age} onChange={this.onAgeChange.bind(this)}/><br/>
-          Color : <input type="color" value={this.state.color} onChange={this.onColorChange.bind(this)}/><br/>
-          <button onClick={this.onSubmit.bind(this)}>Submit</button>
-        </form>
-      );
-    else
-      return (
-        <Data name={this.state.name} age={this.state.age} color={this.state.color} onEdit={this.onEdit.bind(this)} />
-      );
+    return (
+      <table>
+        <thead>
+        <tr>
+          <th>index</th>
+          <th>name</th>
+          <th>cost</th>
+        </tr>
+        </thead>
+        <ProductList items={this.state.items}/>
+      </table>
+    );
   };
 }
