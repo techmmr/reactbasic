@@ -9,6 +9,17 @@ export class Form extends React.Component {
       cost: props.data ? props.data.cost : 0,
     };
   };
+
+  shouldComponentUpdate(nextProps, nextState){
+    if(nextState.name === this.state.name && nextState.cost === this.state.cost)
+      return false;
+    this.state = {
+      name: nextState.name,
+      cost: nextState.cost,
+    };
+    return true;
+  }
+
   onNameChange(event) {
     if(/^[a-zA-Z]*$/.test(event.target.value)) {
       this.setState({
@@ -23,7 +34,7 @@ export class Form extends React.Component {
   onCostChange(event) {
     if(/^\d*$/.test(event.target.value)) {
       this.setState({
-        cost: event.target.value,
+        cost: Number(event.target.value),
       });
     }
     else{
@@ -32,7 +43,11 @@ export class Form extends React.Component {
   };
 
   render() {
-    let formData = {name: this.state.name, cost: Number(this.state.cost)};
+    let formData = {
+      name: this.state.name,
+      cost: Number(this.state.cost),
+      id: this.props.data ? this.props.data.id : 0,
+    };
     return (
       <form>
         Form <br/>

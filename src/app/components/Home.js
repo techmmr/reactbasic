@@ -10,7 +10,7 @@ export class Home extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.showForm = this.showForm.bind(this);
     this.state = {
-      editId: '',
+      editId: -1,
       showForm: false,
       items: [],
       idCount: 0,
@@ -45,10 +45,9 @@ export class Home extends React.Component {
       return alert('lul nice try');
     }
     let newList = this.state.items;
-    if (this.state.editId !== '') {
+    if (this.state.editId >= 0) {
       let item = newList.find(listItem => listItem.id === this.state.editId);
       let index = newList.indexOf(item);
-      formData.id = item.id;
       newList.splice(index, 1, formData);
     }
     else {
@@ -59,16 +58,14 @@ export class Home extends React.Component {
       items: newList,
       showForm: false,
       idCount: this.state.idCount+1,
+      editId: -1,
     });
   }
 
   formRender() {
     if (this.state.showForm) {
-      if (this.state.editId !== '') {
-        let item = this.state.items.find(listItem => listItem.id === this.state.editId);
-        return this.state.showForm ? <Form data={item} handleSubmit={this.handleSubmit}/> : '';
-      }
-      return this.state.showForm ? <Form handleSubmit={this.handleSubmit}/> : '';
+      let item = this.state.items.find(listItem => listItem.id === this.state.editId);
+      return <Form data={item} handleSubmit={this.handleSubmit}/>;
     }
     return '';
   }
