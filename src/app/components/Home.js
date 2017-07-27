@@ -41,7 +41,7 @@ export class Home extends React.Component {
   }
 
   handleSubmit(formData) {
-    if (!(/^[a-zA-Z]*$/.test(formData.name) && /^\d*$/.test(formData.cost))){
+    if (formData.cost <= 0) {
       return alert('lul nice try');
     }
     let newList = this.state.items;
@@ -57,7 +57,7 @@ export class Home extends React.Component {
     this.setState({
       items: newList,
       showForm: false,
-      idCount: this.state.idCount+1,
+      idCount: this.state.idCount + 1,
       editId: -1,
     });
   }
@@ -76,7 +76,7 @@ export class Home extends React.Component {
         Add New Item :
         <button onClick={this.showForm}><span className="glyphicon glyphicon-plus"/></button>
         {this.formRender()}
-        <ProductList items={this.state.items} removeItem={this.removeItem} editItem={this.editItem} />
+        <ProductList items={this.state.items} removeItem={this.removeItem} editItem={this.editItem}/>
       </div>
     );
   };

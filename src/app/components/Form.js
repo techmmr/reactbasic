@@ -5,13 +5,15 @@ export class Form extends React.Component {
   constructor(props) {
     super();
     this.state = {
+      nameValidationError: false,
+      costValidationError: false,
       name: props.data ? props.data.name : '',
       cost: props.data ? props.data.cost : 0,
     };
   };
 
-  shouldComponentUpdate(nextProps, nextState){
-    if(nextState.name === this.state.name && nextState.cost === this.state.cost)
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState === this.state)
       return false;
     this.state = {
       name: nextState.name,
@@ -21,24 +23,38 @@ export class Form extends React.Component {
   }
 
   onNameChange(event) {
-    if(/^[a-zA-Z]*$/.test(event.target.value)) {
+    if (/^[a-zA-Z]*$/.test(event.target.value)) {
       this.setState({
         name: event.target.value,
       });
     }
-    else{
-      alert('nup, this wont work, only alphabets');
+    else {
+      this.setState({
+        nameValidationError: true,
+      });
+      setTimeout(() => {
+        this.setState({
+          nameValidationError: false,
+        });
+      }, 3000);
     }
   };
 
   onCostChange(event) {
-    if(/^\d*$/.test(event.target.value)) {
+    if (/^\d*$/.test(event.target.value)) {
       this.setState({
         cost: Number(event.target.value),
       });
     }
-    else{
-      alert('nup, this wont work, only numbers');
+    else {
+      this.setState({
+        costValidationError: true,
+      });
+      setTimeout(() => {
+        this.setState({
+          costValidationError: false,
+        });
+      }, 3000);
     }
   };
 
@@ -51,8 +67,10 @@ export class Form extends React.Component {
     return (
       <form>
         Form <br/>
-        Name : <input type="text" value={this.state.name} onChange={this.onNameChange.bind(this)}/><br/>
-        Cost : <input type="text" value={this.state.cost} onChange={this.onCostChange.bind(this)}/><br/>
+        Name : <input type="text" value={this.state.name} onChange={this.onNameChange.bind(this)}/>
+        {this.state.nameValidationError ? <span style={{color: 'red'}}>Name should be alphabets only.</span> : ''}<br />
+        Cost : <input type="text" value={this.state.cost} onChange={this.onCostChange.bind(this)}/>
+        {this.state.costValidationError ? <span style={{color: 'red'}}>Cost should be Number only.</span> : ''}<br />
         <button onClick={() => this.props.handleSubmit(formData)}>Submit</button>
       </form>
     );
