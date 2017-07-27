@@ -7,8 +7,10 @@ export const ListItem = (props) => {
       ID : {props.item.id} |
       Name : {props.item.name} |
       Cost : {props.item.cost}
-      <button onClick={() => props.editItem(props.item.id)}><span className="glyphicon glyphicon-pencil"/></button>
-      <button onClick={() => props.removeItem(props.item.id)}><span className="glyphicon glyphicon-trash"/></button>
+      {props.editItem(props.item.id)}
+      <button style={{border: 'none', background: 'white', color: '#337ab7'}} onClick={() => props.removeItem(props.item.id)}>
+        <span className="glyphicon glyphicon-trash"/>
+      </button>
     </div>
   );
 };

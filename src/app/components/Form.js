@@ -62,7 +62,7 @@ export class Form extends React.Component {
     let formData = {
       name: this.state.name,
       cost: Number(this.state.cost),
-      id: this.props.data ? this.props.data.id : 0,
+      id: this.props.match.params.id ? this.props.match.params.id: 0,
     };
     return (
       <form>
